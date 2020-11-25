@@ -3,9 +3,10 @@ use Mix.Config
 # Configure your database
 config :conduit, Conduit.Repo,
   username: "postgres",
-  password: "postgres",
-  database: "conduit_dev",
+  password: "supersecurepgpassword",
+  database: "conduit_readstore_dev",
   hostname: "localhost",
+  port: 8432,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 
@@ -21,6 +22,13 @@ config :conduit, ConduitWeb.Endpoint,
   code_reloader: true,
   check_origin: false,
   watchers: []
+
+config :conduit, Conduit.EventStore,
+  username: "postgres",
+  password: "supersecurepgpassword",
+  database: "conduit_eventstore_dev",
+  hostname: "localhost",
+  port: 8432
 
 # ## SSL Support
 #

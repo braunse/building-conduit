@@ -19,7 +19,7 @@ defmodule Conduit.MixProject do
   # Type `mix help compile.app` for more information.
   def application do
     [
-      mod: {Conduit.Application, []},
+      mod: {Conduit.Supervisor, []},
       extra_applications: [:logger, :runtime_tools]
     ]
   end
@@ -42,7 +42,10 @@ defmodule Conduit.MixProject do
       {:telemetry_poller, "~> 0.4"},
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
-      {:plug_cowboy, "~> 2.0"}
+      {:plug_cowboy, "~> 2.0"},
+      {:commanded, "~> 1.2.0"},
+      {:commanded_eventstore_adapter, "~> 1.2.0"},
+      {:eventstore, "~> 1.2.0"}
     ]
   end
 
