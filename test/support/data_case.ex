@@ -24,6 +24,7 @@ defmodule Conduit.DataCase do
       import Ecto.Changeset
       import Ecto.Query
       import Conduit.DataCase
+      import Conduit.Factory
     end
   end
 
