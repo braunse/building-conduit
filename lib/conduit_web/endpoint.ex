@@ -10,11 +10,11 @@ defmodule ConduitWeb.Endpoint do
     signing_salt: "Wy9fwRMw"
   ]
 
-  socket "/socket", ConduitWeb.UserSocket,
-    websocket: true,
-    longpoll: false
-
-  socket "/live", Phoenix.LiveView.Socket, websocket: [connect_info: [session: @session_options]]
+  # only needed for LiveDashboard in dev/test
+  if Mix.env() in [:dev, :test] do
+    socket "/live", Phoenix.LiveView.Socket,
+      websocket: [connect_info: [session: @session_options]]
+  end
 
   # Serve at "/" the static files from "priv/static" directory.
   #
