@@ -1,4 +1,4 @@
-defmodule Conduit.Application.Supervisor do
+defmodule Conduit.Supervisor do
   # See https://hexdocs.pm/elixir/Application.html
   # for more information on OTP Applications
   @moduledoc false
