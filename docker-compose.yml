@@ -1,0 +1,22 @@
+version: "3.5"
+
+services:
+  postgres:
+    image: postgres:12
+    environment:
+      POSTGRES_PASSWORD: supersecurepgpassword
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - 127.0.0.1:8432:5432
+
+  adminer:
+    image: adminer
+    ports:
+      - 127.0.0.1:8433:8080
+    environment:
+      ADMINER_PLUGINS: ""
+
+
+volumes:
+  postgres_data:
