@@ -14,9 +14,9 @@ defmodule Conduit.Supervisor do
       # Start the PubSub system
       {Phoenix.PubSub, name: Conduit.PubSub},
       # Start the Endpoint (http/https)
-      ConduitWeb.Endpoint
-      # Start a worker by calling: Conduit.Worker.start_link(arg)
-      # {Conduit.Worker, arg}
+      ConduitWeb.Endpoint,
+      # Start the commanded application
+      Conduit.Application,
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
