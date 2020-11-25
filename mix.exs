@@ -45,6 +45,7 @@ defmodule Conduit.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:commanded, "~> 1.2.0"},
       {:commanded_eventstore_adapter, "~> 1.2.0"},
+      {:commanded_ecto_projections, "~> 1.2.0"},
       {:eventstore, "~> 1.2.0"},
       {:exconstructor, "~> 1.1.0"},
       {:ex_machina, "~> 2.4.0", only: :test},
