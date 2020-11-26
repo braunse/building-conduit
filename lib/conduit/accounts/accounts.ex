@@ -1,6 +1,6 @@
 defmodule Conduit.Accounts do
-  alias Conduit.Accounts.User.{RegisterUser, UserProjection}
-  alias Conduit.Application
+  alias Conduit.Accounts.User.{RegisterUser, UserProjection, UserQueries}
+  alias Conduit.{Application, Repo}
 
   def register_user(attrs \\ %{}) do
     command = attrs
@@ -12,6 +12,13 @@ defmodule Conduit.Accounts do
     else
       reply -> reply
     end
+  end
+
+  def find_user_by_username(username) do
+    username
+    |> String.downcase()
+    |> UserQueries.by_username()
+    |> Repo.one()
   end
 
   defp tagged_get(schema, id) do

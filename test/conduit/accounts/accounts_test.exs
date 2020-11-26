@@ -16,11 +16,19 @@ defmodule Conduit.AccountsTest do
     end
 
     @tag :integ
-    @tag :wip
     test "should fail with invalid data and return error" do
       attrs = build(:user, username: "")
       assert {:error, :validation_failure, errors} = Accounts.register_user(attrs)
       assert %{username: [{_, "can't be empty"}]} = errors
+    end
+
+    @tag :integ
+    @tag :wip
+    test "should fail with already-taken username" do
+      {:ok, %{} = user} = Accounts.register_user(build(:user))
+      assert {:error, :validation_failure, errors} = Accounts.register_user(build(:user, username: user.username))
+
+      assert %{username: [{:unique_username, _}]} = errors
     end
   end
 end

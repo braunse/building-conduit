@@ -42,6 +42,7 @@ config :conduit, event_stores: [Conduit.EventStore]
 config :vex,
   sources: [
     Conduit.Support.Validators,
+    Conduit.Accounts.Validators,
     Vex.Validators
   ]
 
