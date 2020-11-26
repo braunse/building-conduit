@@ -13,7 +13,7 @@ config :conduit, Conduit.Repo,
   port: 8432,
   pool: Ecto.Adapters.SQL.Sandbox
 
-  config :conduit, Conduit.EventStore,
+config :conduit, Conduit.EventStore,
   username: "postgres",
   password: "supersecurepgpassword",
   database: "conduit_eventstore_test#{System.get_env("MIX_TEST_PARTITION")}",

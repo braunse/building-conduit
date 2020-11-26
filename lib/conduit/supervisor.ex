@@ -17,6 +17,8 @@ defmodule Conduit.Supervisor do
       ConduitWeb.Endpoint,
       # Start the commanded application
       Conduit.Application,
+      # Start the accounts context
+      Conduit.Accounts.Supervisor,
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
