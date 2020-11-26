@@ -19,6 +19,8 @@ defmodule Conduit.Supervisor do
       Conduit.Application,
       # Start the accounts context
       Conduit.Accounts.Supervisor,
+      # Uniqueness middleware helper
+      Conduit.Support.UniquenessCache,
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
