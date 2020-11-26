@@ -18,4 +18,10 @@ defmodule Conduit.Accounts.User.RegisterUser do
   }
 
   use ExConstructor
+  use Vex.Struct
+
+  validates :user_uuid, uuid: true
+  validates :username, presence: [message: "can't be empty"], string: true
+  validates :email, presence: [message: "can't be empty"], string: true
+  validates :hashed_password, presence: [message: "can't be empty"], string: true
 end

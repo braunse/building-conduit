@@ -48,6 +48,7 @@ defmodule Conduit.MixProject do
       {:commanded_ecto_projections, "~> 1.2.0"},
       {:eventstore, "~> 1.2.0"},
       {:exconstructor, "~> 1.1.0"},
+      {:vex, "~> 0.8.0"},
       {:ex_machina, "~> 2.4.0", only: :test},
       {:mix_test_watch, "~> 1.0.2", runtime: false, only: [:dev, :test]}
     ]
