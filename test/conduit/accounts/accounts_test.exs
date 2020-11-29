@@ -50,7 +50,6 @@ defmodule Conduit.AccountsTest do
     end
 
     @tag :integ
-    @tag :wip
     test "should fail when email address already registered" do
       assert {:ok, existing_user} = Accounts.register_user(build(:user))
       assert {:error, :validation_failure, errors} = Accounts.register_user(build(:user, email: existing_user.email))
@@ -58,7 +57,6 @@ defmodule Conduit.AccountsTest do
     end
 
     @tag :integ
-    @tag :wip
     test "should fail when email address registered twice concurrently" do
       1..2
       |> Enum.map(fn _ -> Task.async(fn -> Accounts.register_user(build(:user, email: "jake@jake.jake")) end) end)
@@ -66,17 +64,23 @@ defmodule Conduit.AccountsTest do
     end
 
     @tag :integ
-    @tag :wip
     test "should fail when email address format is invalid" do
       assert {:error, :validation_failure, errors} = Accounts.register_user(build(:user, email: "invalidemail"))
       assert %{email: [{:format, _}]} = errors
     end
 
     @tag :integ
-    @tag :wip
     test "should convert email address to lower-case" do
       assert {:ok, user} = Accounts.register_user(build(:user, email: "JaKe@Jake.jaKE"))
       assert user.email == "jake@jake.jake"
+    end
+
+    @tag :integ
+    @tag :wip
+    test "should hash the password" do
+      params = build(:user)
+      assert {:ok, user} = Accounts.register_user(params)
+      assert Conduit.Auth.verify_password(params.password, user.hashed_password)
     end
   end
 end

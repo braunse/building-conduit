@@ -8,6 +8,7 @@ defmodule Conduit.Accounts do
     |> RegisterUser.assign_uuid()
     |> RegisterUser.downcase_username()
     |> RegisterUser.downcase_email()
+    |> RegisterUser.hash_password()
 
     with :ok <- Application.dispatch(command, consistency: :strong) do
       tagged_get(UserProjection, command.user_uuid)

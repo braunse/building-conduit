@@ -46,6 +46,8 @@ defmodule Conduit.Accounts.User.RegisterUser do
 
   validates :hashed_password, presence: [message: "can't be empty"], string: true
 
+  validates :password, absence: [message: "must be hashed", allow_nil: true]
+
   defimpl Conduit.Support.Middleware.Uniqueness.UniqueFields, for: __MODULE__ do
     def unique_fields(_command),
       do: [
@@ -64,5 +66,9 @@ defmodule Conduit.Accounts.User.RegisterUser do
 
   def downcase_email(%RegisterUser{email: email} = command) do
     %RegisterUser{command | email: String.downcase(email)}
+  end
+
+  def hash_password(%RegisterUser{password: password} = command) do
+    %RegisterUser{command | hashed_password: Conduit.Auth.hash_password(password), password: nil}
   end
 end
