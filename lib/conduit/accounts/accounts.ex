@@ -7,6 +7,7 @@ defmodule Conduit.Accounts do
     |> RegisterUser.new()
     |> RegisterUser.assign_uuid()
     |> RegisterUser.downcase_username()
+    |> RegisterUser.downcase_email()
 
     with :ok <- Application.dispatch(command, consistency: :strong) do
       tagged_get(UserProjection, command.user_uuid)
@@ -19,6 +20,13 @@ defmodule Conduit.Accounts do
     username
     |> String.downcase()
     |> UserQueries.by_username()
+    |> Repo.one()
+  end
+
+  def find_user_by_email(email) do
+    email
+    |> String.downcase()
+    |> UserQueries.by_email()
     |> Repo.one()
   end
 

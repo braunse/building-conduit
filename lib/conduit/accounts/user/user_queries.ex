@@ -8,4 +8,10 @@ defmodule Conduit.Accounts.User.UserQueries do
       where: p.username == ^username
     )
   end
+
+  def by_email(email) do
+    from(p in UserProjection,
+      where: p.email == ^email
+    )
+  end
 end
