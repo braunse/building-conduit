@@ -23,7 +23,6 @@ defmodule Conduit.AccountsTest do
     end
 
     @tag :integ
-    @tag :wip
     test "should fail with already-taken username" do
       {:ok, %{} = user} = Accounts.register_user(build(:user))
       assert {:error, :validation_failure, errors} = Accounts.register_user(build(:user, username: user.username))
@@ -32,11 +31,24 @@ defmodule Conduit.AccountsTest do
     end
 
     @tag :integ
-    @tag :wip
     test "should fail when registering identical username at same time and return error" do
       1..2
       |> Enum.map(fn _ -> Task.async(fn -> Accounts.register_user(build(:user, username: "jake@jake.jake")) end) end)
       |> Enum.map(&Task.await/1)
+    end
+
+    @tag :integ
+    @tag :wip
+    test "should fail when username format is invalid and return an error" do
+      assert {:error, :validation_failure, errors} = Accounts.register_user(build(:user, username: "j@ke"))
+      assert %{username: _} = errors
+    end
+
+    @tag :integ
+    @tag :wip
+    test "should normalize user names to lower-case" do
+      assert {:ok, user} = Accounts.register_user(build(:user, username: "JaKe"))
+      assert user.username == "jake"
     end
   end
 end

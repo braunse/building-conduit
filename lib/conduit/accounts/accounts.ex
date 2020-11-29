@@ -4,8 +4,9 @@ defmodule Conduit.Accounts do
 
   def register_user(attrs \\ %{}) do
     command = attrs
-    |> assign_uuid(:user_uuid)
     |> RegisterUser.new()
+    |> RegisterUser.assign_uuid()
+    |> RegisterUser.downcase_username()
 
     with :ok <- Application.dispatch(command, consistency: :strong) do
       tagged_get(UserProjection, command.user_uuid)
