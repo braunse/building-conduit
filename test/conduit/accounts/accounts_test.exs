@@ -76,7 +76,6 @@ defmodule Conduit.AccountsTest do
     end
 
     @tag :integ
-    @tag :wip
     test "should hash the password" do
       params = build(:user)
       assert {:ok, user} = Accounts.register_user(params)
