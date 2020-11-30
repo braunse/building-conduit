@@ -1,9 +1,27 @@
 defmodule Conduit.Support.Middleware.Uniqueness do
   @behaviour Commanded.Middleware
 
+  defmodule Claim do
+    defstruct [
+      :context,
+      :value,
+      :field,
+      :validation,
+      :message
+    ]
+
+    @type t :: %__MODULE__{
+            context: atom(),
+            value: atom(),
+            field: atom(),
+            validation: atom(),
+            message: String.t()
+          }
+  end
+
   defprotocol UniqueFields do
     @fallback_to_any true
-    @spec unique_fields(any) :: [{atom(), {atom(), String.t()}}]
+    @spec unique_fields(any) :: [Claim.t()]
     @doc "Returns the list of unique fields for this command"
     def unique_fields(command)
   end
@@ -34,9 +52,10 @@ defmodule Conduit.Support.Middleware.Uniqueness do
   end
 
   def after_failure(%Pipeline{command: command} = pipeline) do
-    #for {field, _error} <- UniqueFields.unique_fields(command) do
-    #  UniquenessCache.release(command.__struct__, field, Map.get(command, field))
-    #end
+    for %Claim{} = claim <- UniqueFields.unique_fields(command) do
+      UniquenessCache.release(claim.context, claim.value, Map.get(command, claim.field))
+    end
+
     pipeline
   end
 
@@ -48,11 +67,11 @@ defmodule Conduit.Support.Middleware.Uniqueness do
     :ok
   end
 
-  defp ensure_uniqueness(command, [{field, error}|fields]) do
-    with :ok <- UniquenessCache.claim(command.__struct__, field, Map.get(command, field)) do
+  defp ensure_uniqueness(command, [%Claim{} = claim | fields]) do
+    with :ok <- UniquenessCache.claim(claim.context, claim.value, Map.get(command, claim.field)) do
       ensure_uniqueness(command, fields)
     else
-      {:error, :already_taken} -> {:error, %{field => [error]}}
+      {:error, :already_taken} -> {:error, %{claim.field => [{claim.validation, claim.message}]}}
     end
   end
 end

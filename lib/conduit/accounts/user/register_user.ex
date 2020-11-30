@@ -1,5 +1,6 @@
 defmodule Conduit.Accounts.User.RegisterUser do
   alias Conduit.Accounts.User.RegisterUser
+  alias Conduit.Support.Middleware.Uniqueness
 
   defstruct [
     :user_uuid,
@@ -51,8 +52,20 @@ defmodule Conduit.Accounts.User.RegisterUser do
   defimpl Conduit.Support.Middleware.Uniqueness.UniqueFields, for: __MODULE__ do
     def unique_fields(_command),
       do: [
-        username: {:unique_username, "has already been taken"},
-        email: {:unique_email, "has already been taken"}
+        %Uniqueness.Claim{
+          context: Conduit.Accounts.User.User,
+          value: :username,
+          field: :username,
+          validation: :unique_username,
+          message: "has already been taken"
+        },
+        %Uniqueness.Claim{
+          context: Conduit.Accounts.User.User,
+          value: :email,
+          field: :email,
+          validation: :unique_email,
+          message: "has already been taken"
+        }
       ]
   end
 

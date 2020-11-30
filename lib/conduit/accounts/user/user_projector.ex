@@ -18,4 +18,13 @@ defmodule Conduit.Accounts.User.UserProjector do
       image: nil
     })
   end
+
+  @impl Commanded.Projections.Ecto
+  def after_update(%UserRegistered{} = registered, _metadata, _changes) do
+    Conduit.Support.UniquenessCache.release(Conduit.Accounts.User.User, :username, registered.username)
+    Conduit.Support.UniquenessCache.release(Conduit.Accounts.User.User, :email, registered.email)
+    :ok
+  end
+
+  def after_update(_, _, _), do: :ok
 end
