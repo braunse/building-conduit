@@ -5,7 +5,6 @@ defmodule Conduit.Accounts.User.UserTest do
 
   describe "register user" do
     @tag :unit
-    @tag :wip
     test "should succeed when valid" do
       register = build(:register_user)
       uuid = register.user_uuid

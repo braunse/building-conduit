@@ -9,7 +9,6 @@ defmodule ConduitWeb.SessionControllerTest do
 
   describe "authenticate user" do
     @tag :web
-    @tag :wip
     test "creates session and renders session data when valid", %{conn: conn} do
       user = build(:user)
       {:ok, _} = Accounts.register_user(user)

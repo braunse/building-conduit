@@ -52,7 +52,6 @@ defmodule ConduitWeb.UserControllerTest do
 
   describe "get current user" do
     @tag :web
-    @tag :wip
     test "should return current user when authenticated", %{conn: conn} do
       user = build(:user)
       {:ok, registered_user} = Accounts.register_user(user)
@@ -78,7 +77,6 @@ defmodule ConduitWeb.UserControllerTest do
     end
 
     @tag :web
-    @tag :wip
     test "should return error when not authenticated", %{conn: conn} do
       conn =
         conn

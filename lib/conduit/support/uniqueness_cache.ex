@@ -2,13 +2,11 @@ defmodule Conduit.Support.UniquenessCache do
   use GenServer
 
   def claim(context, field, value) do
-    IO.inspect({:claim, context, field, value})
-    GenServer.call(__MODULE__, {:claim, context, field, value}) |> IO.inspect()
+    GenServer.call(__MODULE__, {:claim, context, field, value})
   end
 
   def release(context, field, value) do
-    IO.inspect({:release, context, field, value})
-    GenServer.call(__MODULE__, {:release, context, field, value}) |> IO.inspect()
+    GenServer.call(__MODULE__, {:release, context, field, value})
   end
 
   def start_link(_opts) do
