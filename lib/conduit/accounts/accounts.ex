@@ -31,6 +31,12 @@ defmodule Conduit.Accounts do
     |> Repo.one()
   end
 
+  def find_user_by_uuid(uuid) do
+    uuid
+    |> UserQueries.by_uuid()
+    |> Repo.one()
+  end
+
   defp tagged_get(schema, id) do
     case Conduit.Repo.get(schema, id) do
       nil -> {:error, :not_found}

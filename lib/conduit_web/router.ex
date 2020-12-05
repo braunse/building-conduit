@@ -5,9 +5,21 @@ defmodule ConduitWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/api", ConduitWeb do
-    pipe_through :api
+  pipeline :api_auth do
+    plug Guardian.Plug.Pipeline, module: ConduitWeb.Auth.Token, error_handler: ConduitWeb.Auth.ErrorHandler.JSON
+    plug Guardian.Plug.VerifySession
+    plug Guardian.Plug.VerifyHeader, realm: "Token"
+    plug Guardian.Plug.LoadResource, allow_blank: true
+  end
 
+  pipeline :api_auth_enforce do
+    plug Guardian.Plug.EnsureAuthenticated
+  end
+
+  scope "/api", ConduitWeb do
+    pipe_through [:api, :api_auth]
+
+    post "/users/login", SessionController, :create
     resources "/users", UserController, only: [:create]
   end
 

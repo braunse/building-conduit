@@ -14,4 +14,10 @@ defmodule Conduit.Accounts.User.UserQueries do
       where: p.email == ^email
     )
   end
+
+  def by_uuid(uuid) do
+    from(p in UserProjection,
+      where: p.uuid == ^uuid
+    )
+  end
 end
