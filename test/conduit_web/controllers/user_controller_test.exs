@@ -2,6 +2,7 @@ defmodule ConduitWeb.UserControllerTest do
   use ConduitWeb.ConnCase
 
   alias Conduit.Accounts
+  alias Conduit.Accounts.User.UserProjection
 
   setup %{conn: conn} do
     {:ok, conn: put_req_header(conn, "accept", "application/json")}
@@ -46,6 +47,50 @@ defmodule ConduitWeb.UserControllerTest do
                  "has already been taken"
                ]
              }
+    end
+  end
+
+  describe "get current user" do
+    @tag :web
+    @tag :wip
+    test "should return current user when authenticated", %{conn: conn} do
+      user = build(:user)
+      {:ok, registered_user} = Accounts.register_user(user)
+
+      conn =
+        conn
+        |> make_authenticated(registered_user)
+        |> get(Routes.user_path(conn, :current))
+
+      json = json_response(conn, 200)["user"]
+      token = json["token"]
+
+      assert json == %{
+               "email" => user.email,
+               "bio" => nil,
+               "image" => nil,
+               "username" => user.username,
+               "token" => token
+             }
+
+      refute is_nil(token)
+      refute token == ""
+    end
+
+    @tag :web
+    @tag :wip
+    test "should return error when not authenticated", %{conn: conn} do
+      conn =
+        conn
+        |> get(Routes.user_path(conn, :current))
+
+      assert response(conn, 401) == ""
+    end
+  end
+
+  defp make_authenticated(conn, %UserProjection{} = user) do
+    with {:ok, token, _claims} <- ConduitWeb.Auth.Token.encode_and_sign(user) do
+      conn |> put_req_header("authorization", "Token #{token}")
     end
   end
 end

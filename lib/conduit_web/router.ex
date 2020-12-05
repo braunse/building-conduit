@@ -6,7 +6,7 @@ defmodule ConduitWeb.Router do
   end
 
   pipeline :api_auth do
-    plug Guardian.Plug.Pipeline, module: ConduitWeb.Auth.Token, error_handler: ConduitWeb.Auth.ErrorHandler.JSON
+    plug Guardian.Plug.Pipeline, module: ConduitWeb.Auth.Token, error_handler: ConduitWeb.Auth.ErrorHandler
     plug Guardian.Plug.VerifySession
     plug Guardian.Plug.VerifyHeader, realm: "Token"
     plug Guardian.Plug.LoadResource, allow_blank: true
@@ -19,6 +19,7 @@ defmodule ConduitWeb.Router do
   scope "/api", ConduitWeb do
     pipe_through [:api, :api_auth]
 
+    get "/user", UserController, :current
     post "/users/login", SessionController, :create
     resources "/users", UserController, only: [:create]
   end

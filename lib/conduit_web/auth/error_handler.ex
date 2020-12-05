@@ -3,9 +3,22 @@ defmodule ConduitWeb.Auth.ErrorHandler do
 
   import Plug.Conn
 
-  def auth_error(conn, {type, _reason}, _opts) do
+  def auth_error(conn, {:unauthenticated, _reason}, _opts) do
+    respond_with(conn, :unauthorized)
+  end
+
+  def auth_error(conn, {:no_resource_found, _reason}, _opts) do
+    respond_with(conn, :unauthorized)
+  end
+
+  def auth_error(conn, {:already_authenticated, _reason}, _opts) do
+    respond_with(conn, :forbidden)
+  end
+
+  defp respond_with(conn, status) do
     conn
-    |> send_resp(401, to_string(type))
+    |> put_resp_content_type("application/json")
+    |> send_resp(status, "")
     |> halt()
   end
 end
