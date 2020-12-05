@@ -18,4 +18,16 @@ defmodule ConduitWeb.UserView do
       image: user.image
     }
   end
+
+  def render("session.json", %{user: user, token: token}) do
+    %{
+      user: %{
+        username: user.username,
+        email: user.email,
+        bio: user.bio,
+        image: user.image,
+        token: token
+      }
+    }
+  end
 end

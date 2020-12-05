@@ -63,3 +63,6 @@ config :phoenix, :stacktrace_depth, 20
 
 # Initialize plugs at runtime for faster development compilation
 config :phoenix, :plug_init_mode, :runtime
+
+config :conduit, ConduitWeb.Auth.Token,
+  secret_key: "e9QBWvswLJ7NAvorde9iZu1Bpy3PMkNTpWOZ0Tg4qelwbVv+N8SnABYGGYjQs9qm"

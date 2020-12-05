@@ -28,3 +28,6 @@ config :conduit, ConduitWeb.Endpoint,
 
 # Print only warnings and errors during test
 config :logger, level: :warn
+
+config :conduit, ConduitWeb.Auth.Token,
+  secret_key: "XWuiyYw89PvzzIPrCwvrhrvCvEc8LMhezAH0B2pVpfjGn4lcGXPFlUqYDddcNyRi"

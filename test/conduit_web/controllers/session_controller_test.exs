@@ -22,17 +22,19 @@ defmodule ConduitWeb.SessionControllerTest do
           }
 
       json = json_response(conn, 201)["user"]
-
+      assert %{"token" => token} = json
       assert json == %{
                "bio" => nil,
                "email" => user.email,
                "image" => nil,
-               "username" => user.username
+               "username" => user.username,
+               "token" => token
              }
+
+      refute token == ""
     end
 
     @tag :web
-    @tag :wip
     test "does not create session and render error when password is inavlid", %{conn: conn} do
       user = build(:user)
       {:ok, _} = Accounts.register_user(user)
@@ -52,7 +54,6 @@ defmodule ConduitWeb.SessionControllerTest do
     end
 
     @tag :web
-    @tag :wip
     test "does not create session and render error when user is not found", %{conn: conn} do
       user = build(:user)
 
