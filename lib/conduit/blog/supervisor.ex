@@ -10,7 +10,8 @@ defmodule Conduit.Blog.Supervisor do
   def init(_args) do
     children = [
       Blog.Author.AuthorProjector,
-      Blog.Author.CreateAuthorForUserWorkflow
+      Blog.Author.CreateAuthorForUserWorkflow,
+      Blog.Article.Projector
     ]
 
     Supervisor.init(children, strategy: :one_for_one)

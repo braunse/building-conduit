@@ -11,5 +11,7 @@ defmodule Conduit.Repo.Migrations.CreateBlogAuthors do
 
       timestamps()
     end
+
+    create unique_index(:blog_authors, [:user_uuid])
   end
 end

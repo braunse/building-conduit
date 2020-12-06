@@ -17,6 +17,10 @@ defmodule ConduitWeb.ConnCase do
 
   use ExUnit.CaseTemplate
 
+  alias Conduit.Accounts.User.UserProjection
+  import Plug.Conn
+  import Conduit.StoreCleaner
+
   using do
     quote do
       # Import conveniences for testing with connections
@@ -32,13 +36,14 @@ defmodule ConduitWeb.ConnCase do
     end
   end
 
-  setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Conduit.Repo)
-
-    unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Conduit.Repo, {:shared, self()})
-    end
-
+  setup _tags do
+    restart_cleanly()
     {:ok, conn: Phoenix.ConnTest.build_conn()}
+  end
+
+  def make_authenticated(conn, %UserProjection{} = user) do
+    with {:ok, token, _claims} <- ConduitWeb.Auth.Token.encode_and_sign(user) do
+      conn |> put_req_header("authorization", "Token #{token}")
+    end
   end
 end

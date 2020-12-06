@@ -22,6 +22,8 @@ defmodule ConduitWeb.Router do
     get "/user", UserController, :current
     post "/users/login", SessionController, :create
     resources "/users", UserController, only: [:create]
+
+    post "/articles", ArticleController, :create
   end
 
   # Enables LiveDashboard only for development

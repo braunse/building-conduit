@@ -85,10 +85,4 @@ defmodule ConduitWeb.UserControllerTest do
       assert response(conn, 401) == ""
     end
   end
-
-  defp make_authenticated(conn, %UserProjection{} = user) do
-    with {:ok, token, _claims} <- ConduitWeb.Auth.Token.encode_and_sign(user) do
-      conn |> put_req_header("authorization", "Token #{token}")
-    end
-  end
 end

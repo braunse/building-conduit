@@ -19,4 +19,15 @@ defmodule Conduit.Factory do
       password: sequence(:password, &"jakejake#{&1}")
     }
   end
+
+  def article_factory do
+    %{
+      slug: "how-to-train-your-dragon",
+      title: "How to train your dragon",
+      description: "Ever wonder how?",
+      body: "You have to believe!",
+      tag_list: ["dragons", "training"],
+      author_uuid: UUID.uuid4()
+    }
+  end
 end
