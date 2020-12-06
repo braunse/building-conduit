@@ -3,11 +3,10 @@ defmodule Conduit.Blog.Article.Queries do
 
   alias Conduit.Blog.Article
 
-  defmodule Pagination do
-    defstruct [
-      limit: 20,
-      offset: 0
-    ]
+  defmodule ListOptions do
+    defstruct limit: 20,
+              offset: 0,
+              author: nil
 
     use ExConstructor
   end
@@ -18,12 +17,26 @@ defmodule Conduit.Blog.Article.Queries do
   end
 
   def paginate(params, repo) do
-    pagination = Pagination.new(params)
+    options = ListOptions.new(params)
 
-    query = from(a in Article.Projection)
-    articles = from(a in query, order_by: [desc: a.published_at], limit: ^pagination.limit, offset: ^pagination.offset) |> repo.all()
+    query = from(a in Article.Projection) |> filter_by_author(options)
+
+    articles =
+      from(a in query,
+        order_by: [desc: a.published_at],
+        limit: ^options.limit,
+        offset: ^options.offset
+      )
+      |> repo.all()
+
     total_count = from(a in query, select: count(a.uuid)) |> repo.one()
 
     {articles, total_count}
+  end
+
+  defp filter_by_author(q, %ListOptions{author: nil}), do: q
+
+  defp filter_by_author(q, %ListOptions{author: author}) do
+    from(a in q, where: a.author_username == ^author)
   end
 end

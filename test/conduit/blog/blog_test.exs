@@ -47,5 +47,15 @@ defmodule Conduit.BlogTest do
     test "should paginate articles", %{articles: [a1, a2]} do
       assert {[a1], 2} == Blog.list_articles(offset: 1)
     end
+
+    @tag :integ
+    test "should filter by author, not returning articles for unselected authors" do
+      assert {[], 0} == Blog.list_articles(author: "unknown")
+    end
+
+    @tag :integ
+    test "should filter by author, returning articles for selected authors", %{author: author, articles: [a1, a2]} do
+      assert {[a2, a1], 2} == Blog.list_articles(author: author.username)
+    end
   end
 end
