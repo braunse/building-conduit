@@ -57,5 +57,15 @@ defmodule Conduit.BlogTest do
     test "should filter by author, returning articles for selected authors", %{author: author, articles: [a1, a2]} do
       assert {[a2, a1], 2} == Blog.list_articles(author: author.username)
     end
+
+    @tag :integ
+    test "should filter by tag, not returning articles which do not contain the tag" do
+      assert {[], 0} == Blog.list_articles(tag: "untagged")
+    end
+
+    @tag :integ
+    test "should filter by tag, returning articles which contain the tag", %{articles: [a1, a2]} do
+      assert {[a2, a1], 2} == Blog.list_articles(tag: Enum.at(a1.tag_list, 0))
+    end
   end
 end

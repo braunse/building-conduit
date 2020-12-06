@@ -6,7 +6,8 @@ defmodule Conduit.Blog.Article.Queries do
   defmodule ListOptions do
     defstruct limit: 20,
               offset: 0,
-              author: nil
+              author: nil,
+              tag: nil
 
     use ExConstructor
   end
@@ -19,7 +20,7 @@ defmodule Conduit.Blog.Article.Queries do
   def paginate(params, repo) do
     options = ListOptions.new(params)
 
-    query = from(a in Article.Projection) |> filter_by_author(options)
+    query = from(a in Article.Projection) |> filter_by_author(options) |> filter_by_tag(options)
 
     articles =
       from(a in query,
@@ -38,5 +39,11 @@ defmodule Conduit.Blog.Article.Queries do
 
   defp filter_by_author(q, %ListOptions{author: author}) do
     from(a in q, where: a.author_username == ^author)
+  end
+
+  defp filter_by_tag(q, %ListOptions{tag: nil}), do: q
+
+  defp filter_by_tag(q, %ListOptions{tag: tag}) do
+    from(a in q, where: fragment("? @> ?", a.tag_list, [^tag]))
   end
 end
