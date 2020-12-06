@@ -21,4 +21,10 @@ defmodule ConduitWeb.ArticleController do
     {articles, count} = Blog.list_articles(params)
     render(conn, "index.json", articles: articles, total_count: count)
   end
+
+  def show(conn, %{"slug" => slug}) do
+    with {:ok, article} <- Blog.get_article_by_slug(slug) do
+      render(conn, "show.json", article: article)
+    end
+  end
 end

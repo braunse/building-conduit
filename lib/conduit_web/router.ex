@@ -25,6 +25,7 @@ defmodule ConduitWeb.Router do
 
     get "/articles", ArticleController, :index
     post "/articles", ArticleController, :create
+    get "/articles/:slug", ArticleController, :show
   end
 
   # Enables LiveDashboard only for development

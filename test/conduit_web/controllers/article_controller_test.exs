@@ -110,4 +110,49 @@ defmodule ConduitWeb.ArticleControllerTest do
     end
   end
 
+  describe "get article" do
+    setup [
+      :create_author,
+      :publish_articles
+    ]
+
+    @tag :web
+    test "should return published article by slug", %{
+      conn: conn,
+      author: author,
+      articles: [article | _]
+    } do
+      conn = get(conn, Routes.article_path(conn, :show, article.slug))
+      json = json_response(conn, 200)
+      assert %{"article" => %{"createdAt" => createdAt, "updatedAt" => updatedAt}} = json
+
+      assert json == %{
+               "article" => %{
+                 "slug" => article.slug,
+                 "title" => article.title,
+                 "description" => article.description,
+                 "body" => article.body,
+                 "tagList" => article.tag_list,
+                 "createdAt" => createdAt,
+                 "updatedAt" => updatedAt,
+                 "favorited" => false,
+                 "favoritesCount" => 0,
+                 "author" => %{
+                   "username" => author.username,
+                   "bio" => author.bio,
+                   "image" => author.image,
+                   "following" => false
+                 }
+               }
+             }
+    end
+
+    @tag :web
+    test "should return 404 when unknown slug", %{
+      conn: conn
+    } do
+      conn = get(conn, Routes.article_path(conn, :show, "this-slug-does-not-exist"))
+      assert conn.status == 404
+    end
+  end
 end
