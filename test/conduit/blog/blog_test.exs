@@ -39,12 +39,12 @@ defmodule Conduit.BlogTest do
     end
 
     @tag :integ
-    test "should limit articles", %{articles: [a1, a2]} do
+    test "should limit articles", %{articles: [_a1, a2]} do
       assert {[a2], 2} == Blog.list_articles(limit: 1)
     end
 
     @tag :integ
-    test "should paginate articles", %{articles: [a1, a2]} do
+    test "should paginate articles", %{articles: [a1, _a2]} do
       assert {[a1], 2} == Blog.list_articles(offset: 1)
     end
 

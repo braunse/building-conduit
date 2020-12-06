@@ -2,7 +2,6 @@ defmodule ConduitWeb.ArticleController do
   use ConduitWeb, :controller
 
   alias Conduit.Blog
-  alias Conduit.Blog.Article
 
   plug Guardian.Plug.EnsureAuthenticated when action in [:create]
 

@@ -52,7 +52,7 @@ defmodule Conduit.Blog do
   end
 
   def list_articles(params \\ %{}) do
-    {articles, count} = Article.Queries.paginate(params, Repo)
+    Article.Queries.paginate(params, Repo)
   end
 
   defp get(schema, id) do

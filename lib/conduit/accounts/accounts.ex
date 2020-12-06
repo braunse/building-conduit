@@ -43,7 +43,4 @@ defmodule Conduit.Accounts do
       val -> {:ok, val}
     end
   end
-
-  defp assign_uuid(attrs, key) when is_map(attrs), do: Map.put(attrs, key, UUID.uuid4())
-  defp assign_uuid(attrs, key) when is_list(attrs), do: Keyword.put(attrs, key, UUID.uuid4())
 end

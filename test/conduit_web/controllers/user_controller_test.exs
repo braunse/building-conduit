@@ -2,7 +2,6 @@ defmodule ConduitWeb.UserControllerTest do
   use ConduitWeb.ConnCase
 
   alias Conduit.Accounts
-  alias Conduit.Accounts.User.UserProjection
 
   setup %{conn: conn} do
     {:ok, conn: put_req_header(conn, "accept", "application/json")}
