@@ -51,6 +51,10 @@ defmodule Conduit.Blog do
     end
   end
 
+  def list_articles(params \\ %{}) do
+    {articles, count} = Article.Queries.paginate(params, Repo)
+  end
+
   defp get(schema, id) do
     case Repo.get(schema, id) do
       nil -> {:error, :not_found}

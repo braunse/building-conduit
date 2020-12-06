@@ -4,6 +4,7 @@ defmodule Conduit.BlogTest do
   alias Conduit.Accounts
   alias Conduit.Blog
   alias Conduit.Blog.{Author, Article}
+  import Conduit.SeedHelpers
 
   describe "publish article" do
     setup [
@@ -27,9 +28,28 @@ defmodule Conduit.BlogTest do
     end
   end
 
-  defp create_author(_context) do
-    {:ok, user} = Accounts.register_user(build(:user))
-    {:ok, author} = Blog.get_author(user.uuid)
-    [author: author]
+  describe "list articles" do
+    setup [
+      :create_author,
+      :publish_articles
+    ]
+
+    @tag :integ
+    @tag :wip
+    test "should list articled by published date descending", %{articles: [a1, a2]} do
+      assert {[a2, a1], 2} == Blog.list_articles()
+    end
+
+    @tag :integ
+    @tag :wip
+    test "should limit articles", %{articles: [a1, a2]} do
+      assert {[a2], 2} == Blog.list_articles(limit: 1)
+    end
+
+    @tag :integ
+    @tag :wip
+    test "should paginate articles", %{articles: [a1, a2]} do
+      assert {[a1], 2} == Blog.list_articles(offset: 1)
+    end
   end
 end

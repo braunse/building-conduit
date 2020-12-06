@@ -16,4 +16,9 @@ defmodule ConduitWeb.ArticleController do
       conn |> put_status(:created) |> render("show.json", article: article)
     end
   end
+
+  def index(conn, params) do
+    {articles, count} = Blog.list_articles(params)
+    render(conn, "index.json", articles: articles, total_count: count)
+  end
 end

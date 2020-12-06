@@ -3,6 +3,13 @@ defmodule ConduitWeb.ArticleView do
 
   alias Conduit.Blog.Article
 
+  def render("index.json", %{articles: articles, total_count: total_count}) do
+    %{
+      articles: articles |> Enum.map(&render("article.json", %{article: &1})),
+      articlesCount: total_count
+    }
+  end
+
   def render("show.json", %{article: article}) do
     %{article: render("article.json", %{article: article})}
   end
