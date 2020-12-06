@@ -6,5 +6,7 @@ defmodule Conduit.Accounts.Router do
   middleware Conduit.Support.Middleware.Validate
   middleware Conduit.Support.Middleware.Uniqueness
 
-  dispatch [RegisterUser], to: User, identity: :user_uuid
+  identify User, by: :user_uuid, prefix: "user-"
+
+  dispatch [RegisterUser], to: User
 end

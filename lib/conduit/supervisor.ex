@@ -19,6 +19,8 @@ defmodule Conduit.Supervisor do
       Conduit.Application,
       # Start the accounts context
       Conduit.Accounts.Supervisor,
+      # Start the blog context
+      Conduit.Blog.Supervisor,
       # Uniqueness middleware helper
       Conduit.Support.UniquenessCache,
     ]

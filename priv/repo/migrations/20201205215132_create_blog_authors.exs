@@ -1,0 +1,15 @@
+defmodule Conduit.Repo.Migrations.CreateBlogAuthors do
+  use Ecto.Migration
+
+  def change do
+    create table(:blog_authors, primary_key: false) do
+      add :uuid, :uuid, primary_key: true
+      add :user_uuid, :uuid
+      add :username, :string
+      add :bio, :string
+      add :image, :string
+
+      timestamps()
+    end
+  end
+end
