@@ -12,7 +12,6 @@ defmodule ConduitWeb.ArticleControllerTest do
 
   describe "publish article" do
     @tag :web
-    @tag :wip
     test "should create and return article when data is valid", %{conn: conn} do
       {:ok, user} = Accounts.register_user(build(:user))
       article = build(:article)
@@ -58,7 +57,6 @@ defmodule ConduitWeb.ArticleControllerTest do
     ]
 
     @tag :web
-    @tag :wip
     test "should return published articles by date published", %{
       conn: conn,
       author: author,

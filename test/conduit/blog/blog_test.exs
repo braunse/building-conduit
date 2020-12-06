@@ -12,7 +12,6 @@ defmodule Conduit.BlogTest do
     ]
 
     @tag :integ
-    @tag :wip
     test "should succeed with valid data", %{author: %Author.AuthorProjection{} = author} do
       article_params = build(:article, author_uuid: author.uuid)
 
@@ -35,19 +34,16 @@ defmodule Conduit.BlogTest do
     ]
 
     @tag :integ
-    @tag :wip
     test "should list articled by published date descending", %{articles: [a1, a2]} do
       assert {[a2, a1], 2} == Blog.list_articles()
     end
 
     @tag :integ
-    @tag :wip
     test "should limit articles", %{articles: [a1, a2]} do
       assert {[a2], 2} == Blog.list_articles(limit: 1)
     end
 
     @tag :integ
-    @tag :wip
     test "should paginate articles", %{articles: [a1, a2]} do
       assert {[a1], 2} == Blog.list_articles(offset: 1)
     end
