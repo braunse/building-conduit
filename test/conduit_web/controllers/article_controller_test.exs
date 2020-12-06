@@ -67,10 +67,10 @@ defmodule ConduitWeb.ArticleControllerTest do
 
       assert %{"articles" => [j1, j2], "articlesCount" => 2} = json
 
-      created_at_1 = j1["createdAt"]
-      updated_at_1 = j1["updatedAt"]
-      created_at_2 = j2["createdAt"]
-      updated_at_2 = j2["updatedAt"]
+      created_at_1 = j2["createdAt"]
+      updated_at_1 = j2["updatedAt"]
+      created_at_2 = j1["createdAt"]
+      updated_at_2 = j1["updatedAt"]
 
       assert j1 == %{
                "slug" => a2.slug,
