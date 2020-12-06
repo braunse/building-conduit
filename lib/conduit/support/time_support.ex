@@ -8,6 +8,5 @@ defmodule Conduit.Support.TimeSupport do
 
   def to_utc_naive(%NaiveDateTime{} = ndt) do
     ndt
-    |> NaiveDateTime.truncate(:second)
   end
 end

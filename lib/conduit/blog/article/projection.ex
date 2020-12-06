@@ -10,7 +10,7 @@ defmodule Conduit.Blog.Article.Projection do
     field :body, :string
     field :tag_list, {:array, :string}
     field :favorite_count, :integer
-    field :published_at, :naive_datetime
+    field :published_at, :naive_datetime_usec
     field :author_uuid, :binary_id
     field :author_username, :string
     field :author_bio, :string
