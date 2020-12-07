@@ -15,6 +15,7 @@ defmodule Conduit.Blog.Article.Projection do
     field :author_username, :string
     field :author_bio, :string
     field :author_image, :string
+    field :favorited, :boolean, virtual: true, default: false
 
     timestamps()
   end

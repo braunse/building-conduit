@@ -3,6 +3,7 @@ defmodule Conduit.SeedHelpers do
 
   alias Conduit.Accounts
   alias Conduit.Blog
+  import ConduitWeb.ConnCase
 
   def create_author(_context) do
     {:ok, user} = Accounts.register_user(build(:user))
@@ -28,6 +29,19 @@ defmodule Conduit.SeedHelpers do
       )
 
     [articles: [article1, article2]]
+  end
+
+  def register_user(_context) do
+    {:ok, user} = Accounts.register_user(build(:user))
+
+    [user: user]
+  end
+
+  def favorite_article(%{articles: [a|_], user: user}) do
+    {:ok, author} = Blog.get_author(user.uuid)
+    {:ok, _} = Blog.favorite_article(a, author)
+
+    []
   end
 
 end

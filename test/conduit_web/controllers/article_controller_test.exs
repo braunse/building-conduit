@@ -53,16 +53,19 @@ defmodule ConduitWeb.ArticleControllerTest do
   describe "list articles" do
     setup [
       :create_author,
-      :publish_articles
+      :register_user,
+      :publish_articles,
+      :favorite_article
     ]
 
     @tag :web
     test "should return published articles by date published", %{
       conn: conn,
       author: author,
+      user: user,
       articles: [a1, a2]
     } do
-      conn = get(conn, Routes.article_path(conn, :index))
+      conn = conn |> make_authenticated(user) |> get(Routes.article_path(conn, :index))
       json = json_response(conn, 200)
 
       assert %{"articles" => [j1, j2], "articlesCount" => 2} = json
@@ -98,8 +101,8 @@ defmodule ConduitWeb.ArticleControllerTest do
                "tagList" => a1.tag_list,
                "createdAt" => created_at_1,
                "updatedAt" => updated_at_1,
-               "favorited" => false,
-               "favoritesCount" => 0,
+               "favorited" => true,
+               "favoritesCount" => 1,
                "author" => %{
                  "username" => author.username,
                  "bio" => author.bio,

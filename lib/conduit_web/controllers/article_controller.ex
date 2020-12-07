@@ -17,7 +17,9 @@ defmodule ConduitWeb.ArticleController do
   end
 
   def index(conn, params) do
-    {articles, count} = Blog.list_articles(params)
+    reader = ConduitWeb.Auth.Token.Plug.current_resource(conn)
+    author = reader && Blog.get_author!(reader.uuid)
+    {articles, count} = Blog.list_articles(params, author)
     render(conn, "index.json", articles: articles, total_count: count)
   end
 

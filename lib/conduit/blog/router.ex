@@ -11,5 +11,5 @@ defmodule Conduit.Blog.Router do
   identify Article, by: :article_uuid, prefix: "article-"
 
   dispatch [Author.CreateAuthor], to: Author
-  dispatch [Article.Publish], to: Article
+  dispatch [Article.Publish, Article.Favorite, Article.Unfavorite], to: Article
 end

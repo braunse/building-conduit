@@ -10,7 +10,7 @@ defmodule Conduit.Blog.Article.Projector do
   alias Conduit.Blog.Author
   alias Conduit.Blog.Article
 
-  project(%Article.Published{} = published, %{created_at: published_at}, fn multi ->
+  project %Article.Published{} = published, %{created_at: published_at}, fn multi ->
     published_at = to_utc_naive(published_at)
 
     multi
@@ -33,5 +33,30 @@ defmodule Conduit.Blog.Article.Projector do
         author_username: author.username
       }
     end)
-  end)
+  end
+
+  project %Article.Favorited{} = favorited, fn multi ->
+    multi
+    |> Ecto.Multi.insert(:favorited_article, %Article.FavoritedProjection{
+      article_uuid: favorited.article_uuid,
+      favorited_by_author_uuid: favorited.favorited_by_author_uuid
+    })
+    |> Ecto.Multi.update_all(:article, Article.Queries.by_id(favorited.article_uuid),
+      set: [favorite_count: favorited.favorite_count]
+    )
+  end
+
+  project %Article.Unfavorited{} = unfavorited, fn multi ->
+    multi
+    |> Ecto.Multi.delete_all(
+      :favorited_article,
+      Article.Queries.favorited_by_article_author(
+        unfavorited.article_uuid,
+        unfavorited.unfavorited_by_author_uuid
+      )
+    )
+    |> Ecto.Multi.update_all(:article, Article.Queries.by_id(unfavorited.article_uuid),
+      set: [favorite_count: unfavorited.favorite_count]
+    )
+  end
 end
