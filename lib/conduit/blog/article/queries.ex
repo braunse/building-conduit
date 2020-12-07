@@ -8,7 +8,8 @@ defmodule Conduit.Blog.Article.Queries do
     defstruct limit: 20,
               offset: 0,
               author: nil,
-              tag: nil
+              tag: nil,
+              favorited: nil
 
     use ExConstructor
   end
@@ -31,7 +32,11 @@ defmodule Conduit.Blog.Article.Queries do
   def paginate(params, repo, reader \\ nil) do
     options = ListOptions.new(params)
 
-    query = from(a in Article.Projection) |> filter_by_author(options) |> filter_by_tag(options)
+    query =
+      from(a in Article.Projection)
+      |> filter_by_author(options)
+      |> filter_by_tag(options)
+      |> filter_by_favorite(options)
 
     articles =
       from(a in query,
@@ -60,6 +65,17 @@ defmodule Conduit.Blog.Article.Queries do
     from(a in q, where: fragment("? @> ?", a.tag_list, [^tag]))
   end
 
+  defp filter_by_favorite(q, %ListOptions{favorited: nil}), do: q
+
+  defp filter_by_favorite(q, %ListOptions{favorited: username}) do
+    from(a in q,
+      join: f in Article.FavoritedProjection,
+      as: :favorited,
+      on: f.article_uuid == a.uuid,
+      where: f.favorited_by_author_username == ^username
+    )
+  end
+
   defp include_favorited(q, nil) do
     q
   end
@@ -67,7 +83,7 @@ defmodule Conduit.Blog.Article.Queries do
   defp include_favorited(q, %Author.AuthorProjection{uuid: reader_uuid}) do
     from(a in q,
       left_join: f in Article.FavoritedProjection,
-      as: :favorited,
+      as: :reader_favorited,
       on: f.article_uuid == a.uuid and f.favorited_by_author_uuid == ^reader_uuid,
       select: %{a | favorited: not is_nil(f.article_uuid)}
     )

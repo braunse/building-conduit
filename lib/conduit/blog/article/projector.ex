@@ -37,10 +37,21 @@ defmodule Conduit.Blog.Article.Projector do
 
   project %Article.Favorited{} = favorited, fn multi ->
     multi
-    |> Ecto.Multi.insert(:favorited_article, %Article.FavoritedProjection{
-      article_uuid: favorited.article_uuid,
-      favorited_by_author_uuid: favorited.favorited_by_author_uuid
-    })
+    |> Ecto.Multi.run(:author_username, fn repo, _changes ->
+      from(a in Author.AuthorProjection,
+        where: a.uuid == ^favorited.favorited_by_author_uuid,
+        select: a.username
+      )
+      |> repo.one()
+      |> tagged()
+    end)
+    |> Ecto.Multi.insert(:favorited_article, fn %{author_username: author_username} ->
+      %Article.FavoritedProjection{
+        article_uuid: favorited.article_uuid,
+        favorited_by_author_uuid: favorited.favorited_by_author_uuid,
+        favorited_by_author_username: author_username
+      }
+    end)
     |> Ecto.Multi.update_all(:article, Article.Queries.by_id(favorited.article_uuid),
       set: [favorite_count: favorited.favorite_count]
     )

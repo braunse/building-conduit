@@ -37,11 +37,15 @@ defmodule Conduit.SeedHelpers do
     [user: user]
   end
 
-  def favorite_article(%{articles: [a|_], user: user}) do
+  def favorite_article(%{articles: [a | rest], user: user}) do
     {:ok, author} = Blog.get_author(user.uuid)
     {:ok, _} = Blog.favorite_article(a, author)
 
-    []
-  end
+    articles = [
+      Map.put(a, :favorite_count, 1)
+      | rest
+    ]
 
+    [articles: articles]
+  end
 end

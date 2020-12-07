@@ -30,7 +30,9 @@ defmodule Conduit.BlogTest do
   describe "list articles" do
     setup [
       :create_author,
-      :publish_articles
+      :register_user,
+      :publish_articles,
+      :favorite_article
     ]
 
     @tag :integ
@@ -66,6 +68,16 @@ defmodule Conduit.BlogTest do
     @tag :integ
     test "should filter by tag, returning articles which contain the tag", %{articles: [a1, a2]} do
       assert {[a2, a1], 2} == Blog.list_articles(tag: Enum.at(a1.tag_list, 0))
+    end
+
+    @tag :integ
+    test "should filter by favorited by user", %{user: user, articles: [a1, a2]} do
+      assert {[a1], 1} == Blog.list_articles(favorited: user.username)
+    end
+
+    @tag :integ
+    test "should filter by nonexistant user" do
+      assert {[], 0} == Blog.list_articles(favorited: "this-user-does-not-exist")
     end
   end
 end
