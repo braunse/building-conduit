@@ -95,6 +95,11 @@ defmodule Conduit.Blog do
     end
   end
 
+  def list_tags() do
+    Article.Queries.list_tag_names()
+    |> Repo.all()
+  end
+
   defp get(schema, id) do
     case Repo.get(schema, id) do
       nil -> {:error, :not_found}

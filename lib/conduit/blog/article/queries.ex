@@ -53,6 +53,14 @@ defmodule Conduit.Blog.Article.Queries do
     {articles, total_count}
   end
 
+  def list_tags() do
+    from(t in Article.TagProjection)
+  end
+
+  def list_tag_names() do
+    from(t in list_tags(), select: t.name)
+  end
+
   defp filter_by_author(q, %ListOptions{author: nil}), do: q
 
   defp filter_by_author(q, %ListOptions{author: author}) do

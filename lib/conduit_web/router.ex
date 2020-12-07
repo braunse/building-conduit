@@ -28,6 +28,8 @@ defmodule ConduitWeb.Router do
     get "/articles/:slug", ArticleController, :show
     post "/articles/:slug/favorite", FavoriteArticleController, :create
     delete "/articles/:slug/favorite", FavoriteArticleController, :delete
+
+    get "/tags", TagController, :index
   end
 
   # Enables LiveDashboard only for development
