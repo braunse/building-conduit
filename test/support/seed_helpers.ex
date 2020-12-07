@@ -3,7 +3,6 @@ defmodule Conduit.SeedHelpers do
 
   alias Conduit.Accounts
   alias Conduit.Blog
-  import ConduitWeb.ConnCase
 
   def create_author(_context) do
     {:ok, user} = Accounts.register_user(build(:user))
